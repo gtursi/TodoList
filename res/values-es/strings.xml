@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<string name="app_name">Tareas</string>
+    <string name="action_settings">Configuración</string>
+	<string name="add_new">Agregar</string>
+	<string name="remove">Borrar</string>
+	<string name="cancel">Cancelar</string>
+	<string name="add_new_content_description">Permite agregar un nuevo ítem</string>
+	<string name="remove_content_description">Permite borrar un ítem</string>
+			    
+</resources>
