@@ -32,7 +32,7 @@ public class ToDoList extends Activity {
 	private ArrayList<String> todoItems;
 	private ArrayAdapter<String> aa;
 	private EditText editText;
-	private ListView listView;
+	private ListView listView;//
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
