@@ -1,87 +1,80 @@
 package com.paad.todolist;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.gtdev.commons.FileUtils;
+import com.gtdev.commons.KeyUtils;
 
 public class ToDoList extends Activity {
 
-	static final private int ADD_NEW_TODO = Menu.FIRST;
-	static final private int REMOVE_TODO = Menu.FIRST + 1;
+	static final private int DELETE_ALL = Menu.FIRST;
+	static final private int REMOVE_TODO = Menu.FIRST;
 
-	// Create the array list of to do items
 	private ArrayList<String> todoItems;
-	// Create the array adapter to bind the array to the listview
 	private ArrayAdapter<String> aa;
-	private EditText myEditText;
-	private boolean addingNew = false;
-	private ListView myListView;
+	private EditText editText;
+	private ListView listView;
 
-	// Called at the start of the full lifetime.
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// Initialize activity.
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		// Get references to UI widgets
-		myListView = (ListView) findViewById(R.id.myListView);
-		myEditText = (EditText) findViewById(R.id.myEditText);
+		listView = (ListView) findViewById(R.id.myListView);
+		editText = (EditText) findViewById(R.id.myEditText);
 
-		// Create the array list of to do items
-		todoItems = new ArrayList<String>();
-		// Create the array adapter to bind the array to the listview
+		todoItems = FileUtils.getData(getString(R.string.data_file), this);
 		aa = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, todoItems);
-		// Bind the array adapter to the listview.
-		myListView.setAdapter(aa);
+		listView.setAdapter(aa);
 
-		myEditText.setOnKeyListener(new OnKeyListener() {
+		editText.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN)
-					switch (keyCode) {
-					case KeyEvent.KEYCODE_DPAD_CENTER:
-					case KeyEvent.KEYCODE_ENTER:
-					case KeyEvent.FLAG_EDITOR_ACTION:
-						todoItems.add(0, myEditText.getText().toString());
-						myEditText.setText("");
-						aa.notifyDataSetChanged();
-						cancelAdd();
-						return true;
-					default:
-						break;
-					}
+				if (KeyUtils.okPressed(event)) {
+					saveItem();
+					return true;
+				}
 				return false;
 			}
 		});
-		hookupButtons();
-		registerForContextMenu(myListView);
+
+		editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+				}
+			}
+		});
+
+		registerForContextMenu(listView);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		// Create and add new menu items.
-		MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE,
-				R.string.add_new);
-		MenuItem itemRem = menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
-		// Assign icons
+		MenuItem itemAdd = menu.add(0, DELETE_ALL, Menu.NONE,
+				R.string.delete_all);
 		itemAdd.setIcon(R.drawable.add_new_item);
-		itemRem.setIcon(R.drawable.remove_item);
-		// Allocate shortcuts to each of them.
-		itemAdd.setShortcut('0', 'a');
-		itemRem.setShortcut('1', 'r');
 		return true;
 	}
 
@@ -89,39 +82,17 @@ public class ToDoList extends Activity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.setHeaderTitle("Selected To Do Item");
-		menu.add(0, REMOVE_TODO, Menu.NONE, R.string.remove);
-	}
-
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		int idx = myListView.getSelectedItemPosition();
-		String removeTitle = getString(addingNew ? R.string.cancel
-				: R.string.remove);
-		MenuItem removeItem = menu.findItem(REMOVE_TODO);
-		removeItem.setTitle(removeTitle);
-		removeItem.setVisible(addingNew || idx > -1);
-		return true;
+		menu.setHeaderTitle(R.string.selected_to_do_item);
+		menu.add(Menu.NONE, REMOVE_TODO, Menu.FIRST, R.string.remove);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
-		myEditText.setVisibility(View.GONE);
-		int index = myListView.getSelectedItemPosition();
 		switch (item.getItemId()) {
-		case (REMOVE_TODO): {
-			if (addingNew) {
-				cancelAdd();
-			} else {
-				removeItem(index);
-			}
+		case (DELETE_ALL):
+			deleteAll();
 			return true;
-		}
-		case (ADD_NEW_TODO): {
-			addNewItem();
-			return true;
-		}
 		}
 		return false;
 	}
@@ -141,46 +112,23 @@ public class ToDoList extends Activity {
 		return false;
 	}
 
-	private void cancelAdd() {
-		addingNew = false;
-		myEditText.setVisibility(View.GONE);
-	}
+	private void deleteAll() {
+		try {
+			todoItems.clear();
+		} catch (IndexOutOfBoundsException exc) {
+			Log.e(DISPLAY_SERVICE, "Error al eliminar un elemento", exc);
+		}
+		aa.notifyDataSetChanged();
 
-	private void addNewItem() {
-		addingNew = true;
-		myEditText.setVisibility(View.VISIBLE);
-		myEditText.requestFocus();
 	}
 
 	private void removeItem(int _index) {
-		addingNew = false;
-		todoItems.remove(_index);
+		try {
+			todoItems.remove(_index);
+		} catch (IndexOutOfBoundsException exc) {
+			Log.e(DISPLAY_SERVICE, "Error al eliminar un elemento", exc);
+		}
 		aa.notifyDataSetChanged();
-	}
-
-	private void hookupButtons() {
-		hookupAddNewButton();
-		hookupRemoveButton();
-	}
-
-	private void hookupAddNewButton() {
-		ImageButton addNewButton = (ImageButton) findViewById(R.id.addNewButton);
-
-		addNewButton.setOnClickListener(new ImageButton.OnClickListener() {
-			public void onClick(View v) {
-				addNewItem();
-			}
-		});
-	}
-
-	private void hookupRemoveButton() {
-		ImageButton removeButton = (ImageButton) findViewById(R.id.removeButton);
-
-		removeButton.setOnClickListener(new ImageButton.OnClickListener() {
-			public void onClick(View v) {
-				removeItem(myListView.getSelectedItemPosition());
-			}
-		});
 	}
 
 	// Called after onCreate has finished, use to restore UI state
@@ -242,6 +190,7 @@ public class ToDoList extends Activity {
 		// Persist all edits or state changes
 		// as after this call the process is likely to be killed.
 		super.onStop();
+		grabar();
 	}
 
 	// Called at the end of the full lifetime.
@@ -250,6 +199,39 @@ public class ToDoList extends Activity {
 		// Clean up any resources including ending threads,
 		// closing database connections etc.
 		super.onDestroy();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+
+	private void saveItem() {
+		String text = editText.getText().toString();
+		if (text != null && text.trim().length() > 0) {
+			todoItems.add(0, text);
+			editText.setText("");
+			aa.notifyDataSetChanged();
+		}
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+	}
+
+	public void grabar() {
+		try {
+			OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput(
+					getString(R.string.data_file), Activity.MODE_PRIVATE));
+			for (int i = 0; i < aa.getCount(); i++) {
+				archivo.write(aa.getItem(i));
+				archivo.write(System.getProperty("line.separator"));
+			}
+			archivo.flush();
+			archivo.close();
+			Toast.makeText(this, "Los datos fueron grabados",
+					Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			Log.e(SEARCH_SERVICE, "Error al salvar datos", e);
+		}
 	}
 
 }

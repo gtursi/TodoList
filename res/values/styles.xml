@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!--
@@ -17,9 +16,5 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-
-	<style name="ToDoTheme" parent="@android:style/Theme.Black">
-		<item name="android:textSize">12sp</item>
-	</style>
 
 </resources>
