@@ -23,6 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.paad.todolist.EditActivity"
+            android:label="@string/title_activity_edit"
+            android:parentActivityName="com.paad.todolist.ToDoList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.paad.todolist.ToDoList" />
+        </activity>
     </application>
 
 </manifest>

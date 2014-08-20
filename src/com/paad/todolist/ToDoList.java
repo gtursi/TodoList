@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -32,7 +34,8 @@ public class ToDoList extends Activity {
 	private ArrayList<String> todoItems;
 	private ArrayAdapter<String> aa;
 	private EditText editText;
-	private ListView listView;//
+	private ListView listView;
+	private Intent editIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,14 @@ public class ToDoList extends Activity {
 			}
 		});
 
+		editIntent = new Intent(this, EditActivity.class);
+		listView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				ListView lv = (ListView) v;
+				String text = (String) lv.getSelectedItem();
+				editIntent.putExtra("com.paad.text", text);
+			}
+		});
 		registerForContextMenu(listView);
 	}
 
