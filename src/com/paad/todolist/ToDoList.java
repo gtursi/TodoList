@@ -41,6 +41,7 @@ public class ToDoList extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		System.out.println("ROBERT!");
 		listView = (ListView) findViewById(R.id.myListView);
 		editText = (EditText) findViewById(R.id.myEditText);
 
