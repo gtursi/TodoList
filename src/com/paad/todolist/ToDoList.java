@@ -42,7 +42,7 @@ public class ToDoList extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		System.out.println("ROBERT!");
-		listView = (ListView) findViewById(R.id.myListView);
+		aaaa listView = (ListView) findViewById(R.id.myListView);
 		editText = (EditText) findViewById(R.id.myEditText);
 
 		todoItems = FileUtils.getData(getString(R.string.data_file), this);
