@@ -14,6 +14,8 @@ public class EditActivity extends Activity {
 		setContentView(R.layout.activity_edit);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		// PRUEBA
+		System.out.println("PRUEBA GIT");
 	}
 
 	/**
