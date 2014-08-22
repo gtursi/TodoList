@@ -8,9 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".EditActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/myEditText2"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:inputType="textCapSentences"
+        android:singleLine="false"
+        android:background="@drawable/edit_text"/>
 
 </RelativeLayout>

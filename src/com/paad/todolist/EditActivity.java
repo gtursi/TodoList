@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class EditActivity extends Activity {
+
+	private EditText editText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -14,8 +17,9 @@ public class EditActivity extends Activity {
 		setContentView(R.layout.activity_edit);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		// PRUEBA
-		System.out.println("PRUEBA GIT");
+		Bundle bundle = getIntent().getExtras();
+		editText = (EditText) findViewById(R.id.myEditText2);
+		editText.setText(bundle.getString("itemText"));
 	}
 
 	/**

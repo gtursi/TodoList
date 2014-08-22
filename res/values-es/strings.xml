@@ -7,5 +7,6 @@
 	<string name="remove">Borrar</string>
 	<string name="selected_to_do_item">Item seleccionado</string>
 	<string name="type_here">Escriba aquí</string>
+    <string name="title_activity_edit">Editar</string>
 			    
 </resources>

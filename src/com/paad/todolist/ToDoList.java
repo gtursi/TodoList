@@ -14,13 +14,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gtdev.commons.FileUtils;
@@ -70,11 +71,14 @@ public class ToDoList extends Activity {
 		});
 
 		editIntent = new Intent(this, EditActivity.class);
-		listView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				ListView lv = (ListView) v;
-				String text = (String) lv.getSelectedItem();
-				editIntent.putExtra("com.paad.text", text);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				TextView lv = (TextView) view;
+				String text = (String) lv.getText();
+				editIntent.putExtra("itemText", text);
+				startActivity(editIntent);
 			}
 		});
 		registerForContextMenu(listView);

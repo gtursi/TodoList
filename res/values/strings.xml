@@ -8,7 +8,6 @@
     <string name="remove">Remove</string>
     <string name="selected_to_do_item">Item selected</string>
     <string name="type_here">Type here</string>
-    <string name="title_activity_edit">EditActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_edit">Edit Item</string>
 
 </resources>
