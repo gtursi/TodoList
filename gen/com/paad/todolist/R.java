@@ -22,29 +22,39 @@ public final class R {
     }
     public static final class drawable {
         public static final int add_new_item=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int remove_item=0x7f020002;
+        public static final int edit_text=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int remove_item=0x7f020003;
+        public static final int textfield_default=0x7f020004;
+        public static final int textfield_disabled=0x7f020005;
+        public static final int textfield_disabled_selected=0x7f020006;
+        public static final int textfield_pressed=0x7f020007;
+        public static final int textfield_selected=0x7f020008;
     }
     public static final class id {
-        public static final int addNewButton=0x7f080002;
-        public static final int myEditText=0x7f080000;
-        public static final int myListView=0x7f080001;
-        public static final int removeButton=0x7f080003;
+        public static final int action_settings=0x7f080003;
+        public static final int myEditText=0x7f080001;
+        public static final int myEditText2=0x7f080000;
+        public static final int myListView=0x7f080002;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int activity_edit=0x7f030000;
+        public static final int main=0x7f030001;
     }
     public static final class menu {
-        public static final int my=0x7f070000;
+        public static final int edit=0x7f070000;
+        public static final int my=0x7f070001;
+        public static final int to_do_list=0x7f070002;
     }
     public static final class string {
-        public static final int action_settings=0x7f050001;
-        public static final int add_new=0x7f050002;
-        public static final int add_new_content_description=0x7f050005;
-        public static final int app_name=0x7f050000;
-        public static final int cancel=0x7f050004;
-        public static final int remove=0x7f050003;
-        public static final int remove_content_description=0x7f050006;
+        public static final int action_settings=0x7f050002;
+        public static final int app_name=0x7f050001;
+        public static final int data_file=0x7f050000;
+        public static final int delete_all=0x7f050003;
+        public static final int remove=0x7f050004;
+        public static final int selected_to_do_item=0x7f050005;
+        public static final int title_activity_edit=0x7f050007;
+        public static final int type_here=0x7f050006;
     }
     public static final class style {
         /** 
@@ -73,6 +83,5 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
-        public static final int ToDoTheme=0x7f060002;
     }
 }
