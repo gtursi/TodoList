@@ -1,5 +1,7 @@
 <resources>
 
+    <color name="paper_color">#F9E68A</color>
+    
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -15,6 +17,16 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+		<item name="android:listViewStyle">@style/ListViewStyle.Light</item>
     </style>
+    
+    <style name="ListViewStyle.Light" parent="android:style/Widget.ListView">
+	    <item name="android:background">@color/paper_color</item>
+	    <item name="android:divider">@android:color/darker_gray</item>
+	    <item name="android:dividerHeight">1dp</item>
+	    <item name="android:listSelector">@android:color/holo_blue_light</item>
+	    <item name="android:drawSelectorOnTop">false</item>
+	    <item name="android:cacheColorHint">#00000000</item>
+	</style>
 
 </resources>
